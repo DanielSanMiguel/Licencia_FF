@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fly-Fut Analytics</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/DanielSanMiguel/Licencia_FF/main/logo.png">
+    <style>
+        /* Estilos CSS personalizados */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            text-align: center;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: linear-gradient(to left, #b0aead, #c9c7c5, #dddbd8);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: linear-gradient(to left, #a0ff8b, #6dfe4d, #2eff00);
+        }
+        .warning {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <img src="https://raw.githubusercontent.com/DanielSanMiguel/Licencia_FF/main/foto_ff_cut.jpg" alt="Fly-Fut" style="width: 100%; height: auto;">
+        <h2>Rellena todos los campos para obtener tu licencia</h2>
+
+        <form id="licenciaForm">
+            <input type="text" id="nombre" placeholder="Nombre y Apellidos - Name" required>
+            <input type="text" id="club" placeholder="Club - Team" required>
+            <input type="text" id="puesto" placeholder="Puesto/Cargo - Position/Role" required>
+            <input type="email" id="email" placeholder="E-mail" required>
+            <button type="submit">Solicitar 7 días de prueba</button>
+        </form>
+
+        <p id="mensaje" class="warning"></p>
+    </div>
+
+    <script>
+        document.getElementById('licenciaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const club = document.getElementById('club').value;
+            const puesto = document.getElementById('puesto').value;
+            const email = document.getElementById('email').value;
+
+            const data = {
+                nombre,
+                club,
+                puesto,
+                email
+            };
+
+            fetch('/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('mensaje').innerText = data.message || 'Error al solicitar la licencia.';
+            })
+            .catch(error => {
+                document.getElementById('mensaje').innerText = 'Error al solicitar la licencia.';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
